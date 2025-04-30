@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        .cart-container {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #eee;
+        }
+        .item-details {
+            flex-grow: 1;
+        }
+        .item-actions button {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .cart-summary {
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Seu Carrinho de Compras</h1>
+
+    <div class="cart-container">
+        <h2>Itens no Carrinho</h2>
+        <ul id="cart-items">
+            <li class="cart-item">
+                <div class="item-details">
+                    <span>Item de R$ 25,00 x 1</span>
+                </div>
+                <div class="item-actions">
+                    <button onclick="aumentarQuantidade(0)">+</button>
+                    <button onclick="diminuirQuantidade(0)">-</button>
+                    <button onclick="removerDoCarrinho(0)">Remover</button>
+                </div>
+            </li>
+            <li class="cart-item">
+                <div class="item-details">
+                    <span>Item de R$ 75,00 x 1</span>
+                </div>
+                <div class="item-actions">
+                    <button onclick="aumentarQuantidade(1)">+</button>
+                    <button onclick="diminuirQuantidade(1)">-</button>
+                    <button onclick="removerDoCarrinho(1)">Remover</button>
+                </div>
+            </li>
+            <li class="cart-item">
+                <div class="item-details">
+                    <span>100 Camisas por R$ 90,00 x 1</span>
+                </div>
+                <div class="item-actions">
+                    <button onclick="aumentarQuantidade(2)">+</button>
+                    <button onclick="diminuirQuantidade(2)">-</button>
+                    <button onclick="removerDoCarrinho(2)">Remover</button>
+                </div>
+            </li>
+        </ul>
+        <div class="cart-summary">
+            <strong>Total: <span id="cart-total">R$ 190,00</span></strong>
+        </div>
+        <button>Finalizar Compra</button>
+    </div>
+
+    <script>
+        const cartItemsList = document.getElementById('cart-items');
+        const cartTotalElement = document.getElementById('cart-total');
+        let cart = [
+            { nome: '20 camisas', preco: 25.00, quantidade: 1 },
+            { nome: '5 camisas0', preco: 75.00, quantidade: 1 },
+            { nome: '100 Camisas ', preco: 90.00, quantidade: 1 }
+        ];
+
+        function atualizarCarrinho() {
+            cartItemsList.innerHTML = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('cart-item');
+                listItem.innerHTML = `
+                    <div class="item-details">
+                        <span>${item.nome} - R$ ${item.preco.toFixed(2)} x ${item.quantidade}</span>
+                    </div>
+                    <div class="item-actions">
+                        <button onclick="aumentarQuantidade(${index})">+</button>
+                        <button onclick="diminuirQuantidade(${index})">-</button>
+                        <button onclick="removerDoCarrinho(${index})">Remover</button>
+                    </div>
+                `;
+                cartItemsList.appendChild(listItem);
+                total += item.preco * item.quantidade;
+            });
+            cartTotalElement.textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        function removerDoCarrinho(index) {
+            cart.splice(index, 1);
+            atualizarCarrinho();
+        }
+
+        function aumentarQuantidade(index) {
+            cart[index].quantidade++;
+            atualizarCarrinho();
+        }
+
+        function diminuirQuantidade(index) {
+            if (cart[index].quantidade > 1) {
+                cart[index].quantidade--;
+                atualizarCarrinho();
+            }
+        }
+
+        // Inicializa o carrinho
+        atualizarCarrinho();
+    </script>
+
+</body>
+</html>
